@@ -1,7 +1,7 @@
 const knex = require('../conexao');
 
 const cadastrarUsuario = async (req, res) => {
-    const { nome, email } = req.body;
+    const { nome, email, telefone, cidade } = req.body;
 
     if (!nome) {
         return res.status(404).json("O campo nome é obrigatório");
@@ -13,12 +13,11 @@ const cadastrarUsuario = async (req, res) => {
 
     try {
         const emailExistente = await knex('usuarios').where({ email: email }).first();
-        console.log(emailExistente);
         if (emailExistente) {
             return res.status(404).json("E-mail já existente")
         }
 
-        await knex('usuarios').insert({ nome, email })
+        await knex('usuarios').insert({ nome, email, telefone, cidade })
 
         return res.status(200).json("O usuario foi cadastrado com sucesso!");
     } catch (error) {
@@ -26,8 +25,6 @@ const cadastrarUsuario = async (req, res) => {
     }
 }
 
-
 module.exports = {
     cadastrarUsuario
-
 };
